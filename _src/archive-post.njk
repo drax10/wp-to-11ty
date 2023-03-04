@@ -1,0 +1,100 @@
+---
+layout: page
+pagination:
+  data: posts
+  size: 15
+permalink: "{% if pagination.pageNumber>0 %}blog/page/{{ pagination.pageNumber + 1 }}/index.html{% else %}blog/index.html{% endif %}"
+title: "Blog"
+description: "Blog Description"
+---
+
+<h1>Blog</h1>
+{%- for post in pagination.items %}
+  {% set thumbnail %}
+    {{post._embedded["wp:featuredmedia"][0].media_details.sizes["post-thumbnail"].source_url}}
+  {% endset %}
+  <article>
+    <p>
+      <a
+        href="{{ post.link }}"
+        title="Permalink to: &quot;{{ post.title.rendered }}&quot;"
+      >
+        <img src="{{ thumbnail }}" />
+      </a>
+    </p>
+    <h2>
+      <a
+        href="{{ post.link }}"
+        title="Permalink to: &quot;{{ post.title.rendered }}&quot;"
+        >{{ post.title.rendered | safe }}</a
+      >
+    </h2>
+    <p>{{ post.excerpt.rendered | safe }}</p>
+    <div>
+      <time datetime="{{ post.date }}">{{
+        post.date
+      }}</time>
+      <span>
+        {% for term in post._embedded["wp:term"][1] %}
+        <a href="{{ term.link }}" rel="tag">
+          {{ term.name }}
+        </a>
+        {% endfor %}
+      </span>
+    </div>
+  </article>
+{% endfor -%}
+
+{% set numberOfPages = posts | length / 15 %}
+{% set numberOfPages = numberOfPages | round %}
+{% set currentPage = pagination.pageNumber * 1 + 1 %}
+{% set prevPage = currentPage - 1 %}
+{% set nextPage = currentPage + 1 %}
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <ul class="pagination-list">
+    {% if currentPage != 1%}
+      <li><a class="pagination-link hide-on-mobile" href="/blog/page/{{ prevPage }}">←</a></li>
+    {% endif %}
+
+    {% if currentPage > 2 %}
+      <li><a class="pagination-link" href="/blog/">1</a></li>
+      <li><span class="pagination-ellipsis">&hellip;</span></li>
+    {% endif %}
+
+
+    {% if currentPage == numberOfPages %}
+      <li><a class="pagination-link" href="/blog/page/{{ prevPage - 1 }}">{{ prevPage - 1 }}</a></li>
+    {% endif %}
+    {% if prevPage > 0 %}
+      <li><a class="pagination-link" href="/blog/page/{{ prevPage }}">{{ prevPage }}</a></li>
+    {% endif %}
+    <li><a class="pagination-link is-current" aria-current="page">{{ currentPage }}</a></li>
+    {% if nextPage < numberOfPages + 1 %}
+      <li><a class="pagination-link" href="/blog/page/{{ nextPage }}">{{ nextPage }}</a></li>
+    {% endif %}
+
+    {% if prevPage == 0 %}
+      <li><a class="pagination-link" href="/blog/page/{{ nextPage + 1 }}">{{ nextPage + 1 }}</a></li>
+    {% endif %}
+
+    {% if currentPage < numberOfPages - 1 %}
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
+        <li><a class="pagination-link" href="/blog/page/{{ numberOfPages }}">{{ numberOfPages }}</a></li>
+    {% endif %}
+
+    {% if currentPage != numberOfPages %}
+      <li><a class="pagination-link hide-on-mobile" href="/blog/page/{{ nextPage }}">→</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+<h4>Blog Categories</h4>
+
+<ul style="padding: 0; list-style-type: none">
+  {% for tag in tags %}
+  <li>
+    <a href="{{ tag.link }}">{{ tag.name }}</a>
+  </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,95 @@
+---
+layout: page
+pagination:
+  data: tags
+  size: 1
+  alias: post
+permalink: "blog/tag/{{ post.slug }}/index.html"
+title: "Tags"
+description: "Tags go here"
+---
+
+<div class="container">
+  <h1 class="headline"><span>Blog</span></h1>
+
+  <h2
+    style="
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 0;
+      font-size: 31px;
+    "
+  >
+    What do online shoppers think about?
+  </h2>
+  <p style="text-align: center; text-transform: uppercase; margin-top: 0">
+    We explore this question on our blog
+  </p>
+
+  <div class="content-with-sidebar">
+    <div class="content">
+      {% for item in posts %}
+  {% for tag in item.tags %}
+    {% if tag == post.id %}
+      
+      {% set thumbnail %}{{
+        item._embedded["wp:featuredmedia"][0].media_details.sizes[
+          "post-thumbnail"
+        ].source_url
+      }}{% endset %} {% if not thumbnail %}
+      {% set thumbnail %}https://www.frictionless-commerce.com/wp-content/uploads/2019/04/Default-Featured-Image.png{% endset %}
+      {% endif %}
+      <article class="post--excerpt">
+        <div class="left">
+          <a
+            href="{{ item.link }}"
+            title="Permalink to: &quot;{{ item.title.rendered }}&quot;"
+          >
+            <img src="{{ thumbnail }}" />
+          </a>
+        </div>
+        <div class="right">
+          <h2>
+            <a
+              href="{{ item.link }}"
+              title="Permalink to: &quot;{{ item.title.rendered }}&quot;"
+              >{{ item.title.rendered | safe }}</a
+            >
+          </h2>
+          <p>{{ item.excerpt.rendered | safe }}</p>
+          <div class="post-meta">
+            <time datetime="{{ item.date }}">{{
+              item.date
+            }}</time>
+            <span class="tags">
+              {% for term in post._embedded["wp:term"][1] %}
+              <a href="{{ term.link }}" rel="tag">
+                {{ term.name }}
+              </a>
+              {% endfor %}
+            </span>
+          </div>
+        </div>
+      </article>
+      {% endif %}
+  {% endfor %}
+{% endfor %}
+
+
+    </div>
+    <aside class="sidebar">
+      <div class="widget categories" style="border-top: none">
+        <h4>Blog Categories</h4>
+
+        <!-- TODO: Make these links go to statically generateg pages -->
+        <ul style="padding: 0; list-style-type: none">
+          {% for tag in tags %}
+          <li>
+            <a href="{{ tag.link }}">{{ tag.name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>

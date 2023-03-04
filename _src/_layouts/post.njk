@@ -1,0 +1,33 @@
+---
+layout: page
+---
+{# Only include the WP Block library if we have to #}
+{% if content.includes("wp-block") %}
+  <link rel="stylesheet" href="/assets/styles/block-library.min.css">
+{% endif %}
+
+<header>
+  <h1>{{ post.title.rendered }}</h1>
+</header>
+<div class="post-meta">
+  <time datetime="{{ post.date }}">{{ post.date  }}</time>
+  <span class="tags">
+    {% for term in post._embedded["wp:term"][1] %}
+    <a href="{{ term.link }}" rel="tag">
+      {{ term.name }}
+    </a>
+    {% endfor %}
+  </span>
+</div>
+
+{{ content | safe }}
+
+
+<h4>Blog Tags</h4>
+<ul style="padding: 0; list-style-type: none">
+  {% for tag in tags %}
+  <li>
+    <a href="{{ tag.link }}">{{ tag.name }}</a>
+  </li>
+  {% endfor %}
+</ul>

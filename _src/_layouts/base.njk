@@ -1,0 +1,26 @@
+---
+layout: postprocessing.11ty.js
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+
+    {# Make sure your post uses the alias "post" so that this
+       automatically populates #}
+    {% if post.yoast_head %}
+      {{ post.yoast_head | safe }}
+    {% else %}
+      <title>{{title}}</title>
+      <meta name="{{description}}">
+    {% endif %}
+
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+  </head>
+  <body>
+    {{ content | safe }}
+  </body>
+</html>
