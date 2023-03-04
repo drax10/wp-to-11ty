@@ -2,7 +2,7 @@ const htmlmin = require("html-minifier");
 
 module.exports = (eleventyConfig) => {
   // So the script knows where to pull the wordpress information from
-  eleventyConfig.addGlobalData("wordpressURL", "http://frictionlessco.local/");
+  eleventyConfig.addGlobalData("wordpressURL", "http://example.com/");
   eleventyConfig.addGlobalData("eleventyURL", "http://localhost:8080/");
 
   // Include assets in output
